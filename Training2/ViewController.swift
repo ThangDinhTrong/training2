@@ -88,6 +88,13 @@ class ViewController: UIViewController {
             self.presentViewController(alertController, animated: true, completion: nil)
             return
         }
+        if tel1?.text.isTel() == false || tel2?.text.isTel() == false || tel3?.isTel() == false {
+            let alertController = UIAlertController(title:"Warning",message:"Nhap sai dinh dang telephone",preferredStyle: UIAlertControllerStyle.Alert)
+            alertController.addAction(UIAlertAction(title:"Cancel", style:UIAlertActionStyle.Default,handler:nil))
+            
+            self.presentViewController(alertController, animated: true, completion: nil)
+            return
+        }
 
         //in ket qua
         print("Ten khach hang:\t \(name1.text!) \(name2.text!)")
