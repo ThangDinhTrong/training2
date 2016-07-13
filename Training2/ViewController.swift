@@ -72,56 +72,22 @@ class ViewController: UIViewController {
             
         }
         
-        
-        if emailField.text?.characters.count > 0 {
-            let emailStr = emailField.text
-            if emailStr![(emailStr?.startIndex)!] == "@" {
-                emailTextBool = false
-                //alert thong bao
-                let alertController = UIAlertController(title:"Warning",message:"Nhap sai dinh dang",preferredStyle: UIAlertControllerStyle.Alert)
-                alertController.addAction(UIAlertAction(title:"Cancel", style:UIAlertActionStyle.Default,handler:nil))
-                
-                self.presentViewController(alertController, animated: true, completion: nil)
-                return
-                
-            }
-            else {
-                var haveAcong = false
-                var haveDot = false
-                
-                for char in (emailStr?.characters)! {
-                    if char == "@" && haveAcong == true {
-                        haveAcong = false
-                        emailTextBool = false
-                        break
-                    }
-                    if char == "@" {
-                        haveAcong = true
-                    }
-                    if haveAcong == true {
-                        if char == "." {
-                            haveDot = true
-                        }
-                    }
-        
-                }
-                
-                if haveAcong == true && haveDot == true {
-                    emailTextBool = true
-                }
-                
-                if emailTextBool == false {
-                    //alert thong bao
-                    let alertController = UIAlertController(title:"Warning",message:"Nhap sai dinh dang",preferredStyle: UIAlertControllerStyle.Alert)
-                    alertController.addAction(UIAlertAction(title:"Cancel", style:UIAlertActionStyle.Default,handler:nil))
-                    
-                    self.presentViewController(alertController, animated: true, completion: nil)
-                    return
-                }
-            }
+        if emailField.text?.isEmail() == false {
+            let alertController = UIAlertController(title:"Warning",message:"Nhap sai dinh dang email",preferredStyle: UIAlertControllerStyle.Alert)
+            alertController.addAction(UIAlertAction(title:"Cancel", style:UIAlertActionStyle.Default,handler:nil))
             
+            self.presentViewController(alertController, animated: true, completion: nil)
+            return
+
         }
         
+        if birth.text?.isBirthDay() == false {
+            let alertController = UIAlertController(title:"Warning",message:"Nhap sai dinh dang ngay sinh",preferredStyle: UIAlertControllerStyle.Alert)
+            alertController.addAction(UIAlertAction(title:"Cancel", style:UIAlertActionStyle.Default,handler:nil))
+            
+            self.presentViewController(alertController, animated: true, completion: nil)
+            return
+        }
 
         //in ket qua
         print("Ten khach hang:\t \(name1.text!) \(name2.text!)")
@@ -148,5 +114,23 @@ extension ViewController: SSRadioButtonControllerDelegate{
         else {
             sex = "女性"
         }
+    }
+}
+
+extension String {
+    func isEmail() -> Bool {
+        let regex = try! NSRegularExpression(pattern: "^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,4}$",
+                                             options: [.CaseInsensitive])
+        
+        return regex.firstMatchInString(self, options:[],
+                                        range: NSMakeRange(0, utf16.count)) != nil
+    }
+    func isBirthDay() ->Bool {
+        let regex = try! NSRegularExpression(pattern: "^(0[1-9]|1[012])[-/.](0[1-9]|[12][0-9]|3[01])[-/.](19|20)\\d\\d$", options: [.CaseInsensitive])
+        return regex.firstMatchInString(self, options: [], range: NSMakeRange(0, utf16.count)) != nil
+    }
+    func isTel() -> Bool {
+        let regex = try! NSRegularExpression(pattern: "[0-9]", options: [.CaseInsensitive])
+        return regex.firstMatchInString(self, options: [], range: NSMakeRange(0, utf16.count)) != nil
     }
 }
